@@ -1,5 +1,5 @@
 const http = require('http');
-const io = require('socket.io').listen(3001);
+const socketio = require('socket.io');
 const fs = require('fs');
 
 const hostname = '127.0.0.1';
@@ -19,14 +19,20 @@ const handler = (req, res) => {
 
 
 const server = http.createServer(handler);
+const io = socketio.listen(server);
+
+io.sockets.on('connection', (socket) => {
+  setInterval(() => {
+    const timestamp = Date.now();
+    console.log('Emitted: ' + timestamp);
+    socket.emit('timer', timestamp);
+  }, 2000);
+  socket.on('submit', (data) => {
+    console.log('Submitted: ' + data);
+  });
+});
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-io.sockets.on('connection', (socket) => {
-  socket.emit('news', { news: 'hello world' });
-  socket.on('my other event', (data) => {
-    console.log(data);
-  });
-});
