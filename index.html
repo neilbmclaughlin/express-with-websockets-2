@@ -6,24 +6,14 @@
     function onLoad() {
       socket = io.connect();
 
-      socket.on('timer', (data) => {
-        document.getElementById('timer').innerHTML = Date(data);
+      socket.on('steps', (data) => {
+        document.getElementById('steps').innerHTML = data;
       });
-    };
-    function submitData() {
-      var inputField =  document.getElementById('inputData')
-      socket.emit('submit', inputField.value);
-      inputField.value = '';
     };
   </script>
 
   <body onLoad="onLoad()">
     <h1>RTC Test</h1>
-    <p>Timer: <span id="timer"></span></p>
-    <form action="#">
-      <label for="inputdata">Data</label>
-      <input type="text" id="inputData"/>
-      <input type="button" onClick="submitData()"i value="Submit"/>
-    </form>
+    <p>Steps: <span id="steps"></span></p>
   </body>
 </html>
