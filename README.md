@@ -7,8 +7,8 @@ Quick Start
 
 URLs
 
-* JSON API (Get Only): http://localhost
-* HTML Page using WebSockets: http://localhost/rtc
+* JSON API (Get Only): http://localhost:3000/
+* HTML Page using WebSockets: http://localhost:3000/rtc
 
 Notes
 
