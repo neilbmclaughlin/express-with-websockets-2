@@ -1,7 +1,15 @@
 const http = require('http');
 const WebSocket = require('ws');
 const fs = require('fs');
-const stepCounter = require('./fakeStepCounter');
+const FakeStepCounter = require('./fakeStepCounter');
+
+const stepCounter = new FakeStepCounter();
+
+// Start counting fake steps every 2 seconds
+setInterval(() => {
+  const steps = Math.floor(Math.random() * 10);
+  stepCounter.emit('steps', steps);
+}, 2000);
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -36,3 +44,4 @@ wss.on('connection', function connect(ws) {
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
