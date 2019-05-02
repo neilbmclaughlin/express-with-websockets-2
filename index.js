@@ -1,7 +1,15 @@
 const http = require('http');
-const socketio = require('socket.io');
+const WebSocket = require('ws');
 const fs = require('fs');
-const stepCounter = require('./fakeStepCounter');
+const FakeStepCounter = require('./fakeStepCounter');
+
+const stepCounter = new FakeStepCounter();
+
+// Start counting fake steps every 2 seconds
+setInterval(() => {
+  const steps = Math.floor(Math.random() * 10);
+  stepCounter.emit('steps', steps);
+}, 2000);
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -24,14 +32,16 @@ const handler = (req, res) => {
 };
 
 const server = http.createServer(handler);
-const io = socketio.listen(server);
 
-io.sockets.on('connection', (socket) => {
-  stepCounter.on('steps', function socketEmit() {
-    socket.emit('steps', this.stepCount);
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws) => {
+  stepCounter.on('steps', function socketSend() {
+    ws.send(this.stepCount);
   });
 });
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
