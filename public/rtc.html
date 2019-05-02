@@ -1,0 +1,16 @@
+<html>
+  <script>
+    function onLoad() {
+      var socket = new WebSocket(`ws://${location.host}`);
+
+      socket.onmessage = function(event) {
+        document.getElementById('steps').innerHTML = event.data;
+      };
+    };
+  </script>
+
+  <body onLoad="onLoad()">
+    <h1>RTC Test</h1>
+    <p>Steps: <span id="steps"></span></p>
+  </body>
+</html>

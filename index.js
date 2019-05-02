@@ -1,6 +1,8 @@
-const http = require('http');
+const { createServer } = require('http');
+const express = require('express');
 const WebSocket = require('ws');
-const fs = require('fs');
+const path = require('path');
+
 const FakeStepCounter = require('./fakeStepCounter');
 
 const stepCounter = new FakeStepCounter();
@@ -14,24 +16,18 @@ setInterval(() => {
 const hostname = '127.0.0.1';
 const port = 3000;
 
-const handler = (req, res) => {
-  if (req.url === '/rtc') {
-    fs.readFile(`${__dirname}/index.html`, (err, data) => {
-      if (err) {
-        res.writeHead(500);
-        res.end(`Error loading ${__dirname}/index.html`);
-      } else {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(data);
-      }
-    });
-  } else {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ stepCount: stepCounter.stepCount }));
-  }
-};
+const app = express();
 
-const server = http.createServer(handler);
+app.get('/', (req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ stepCount: stepCounter.stepCount }));
+});
+
+app.use(
+  express.static(path.join(__dirname, '/public'), { extensions: ['html'] }),
+);
+
+const server = createServer(app);
 
 const wss = new WebSocket.Server({ server });
 
@@ -44,4 +40,3 @@ wss.on('connection', (ws) => {
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
-
