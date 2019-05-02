@@ -1,14 +1,11 @@
 <html>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
-
   <script>
-    var socket;
     function onLoad() {
-      socket = io.connect();
+      var socket = new WebSocket(`ws://${location.host}`);
 
-      socket.on('steps', (data) => {
-        document.getElementById('steps').innerHTML = data;
-      });
+      socket.onmessage = function(event) {
+        document.getElementById('steps').innerHTML = event.data;
+      };
     };
   </script>
 

@@ -1,5 +1,5 @@
 const http = require('http');
-const socketio = require('socket.io');
+const WebSocket = require('ws');
 const fs = require('fs');
 const stepCounter = require('./fakeStepCounter');
 
@@ -24,11 +24,12 @@ const handler = (req, res) => {
 };
 
 const server = http.createServer(handler);
-const io = socketio.listen(server);
 
-io.sockets.on('connection', (socket) => {
-  stepCounter.on('steps', function socketEmit() {
-    socket.emit('steps', this.stepCount);
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', function connect(ws) {
+  stepCounter.on('steps', function socketSend() {
+    ws.send(this.stepCount);
   });
 });
 
