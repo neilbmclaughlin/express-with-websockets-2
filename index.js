@@ -35,7 +35,7 @@ const server = http.createServer(handler);
 
 const wss = new WebSocket.Server({ server });
 
-wss.on('connection', function connect(ws) {
+wss.on('connection', (ws) => {
   stepCounter.on('steps', function socketSend() {
     ws.send(this.stepCount);
   });
