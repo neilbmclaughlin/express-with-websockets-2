@@ -3,15 +3,7 @@ const { EventEmitter } = require('events');
 class FakeStepCounter extends EventEmitter {
   constructor() {
     super();
-    this._stepCount = 0;
-  }
-
-  get stepCount() {
-    return this._stepCount;
-  }
-
-  set stepCount(value) {
-    this._stepCount = value;
+    this.stepCount = 0;
   }
 }
 
