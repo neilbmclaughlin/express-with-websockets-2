@@ -27,8 +27,8 @@ const server = http.createServer(handler);
 const io = socketio.listen(server);
 
 io.sockets.on('connection', (socket) => {
-  stepCounter.on('steps', () => {
-    socket.emit('steps', stepCounter.stepCount);
+  stepCounter.on('steps', function socketEmit() {
+    socket.emit('steps', this.stepCount);
   });
 });
 
