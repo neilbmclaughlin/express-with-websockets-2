@@ -18,8 +18,8 @@ const handler = (req, res) => {
       }
     });
   } else {
-    res.writeHead(200);
-    res.end(stepCounter.stepCount.toString());
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ stepCount: stepCounter.stepCount }));
   }
 };
 
