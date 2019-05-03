@@ -9,6 +9,17 @@ class FakeStepCounter extends EventEmitter {
       console.log({ stepCount: this.stepCount });
     });
   }
+
+  static factory() {
+    const stepCounter = new FakeStepCounter();
+    // Start counting fake steps every 2 seconds
+    setInterval(() => {
+      const steps = Math.floor(Math.random() * 10);
+      stepCounter.emit('steps', steps);
+    }, 2000);
+    return stepCounter;
+
+  }
 }
 
 module.exports = FakeStepCounter;
